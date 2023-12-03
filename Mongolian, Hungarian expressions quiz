@@ -1,0 +1,42 @@
+import random
+import pandas as pd
+
+# Specify the full file path
+file_path = 'C:\\Users\\matyi\\PycharmProjects\\experimental\\mong,hun,syn.csv'
+
+# Load the word pairs and synonyms from the CSV file
+df = pd.read_csv(file_path)
+
+# Convert the data frame to a dictionary
+data_dict = {row['Mongolian']: row['Hungarian'] for index, row in df.iterrows()}
+synonym_dict = {row['Mongolian']: row['Synonyms'].split(';') for index, row in df.iterrows() if pd.notna(row['Synonyms'])}
+
+keys = list(data_dict.keys())
+random.shuffle(keys)
+
+while True:
+    start = input("Let's start! OK or EXIT? ")
+    if start.lower() == "ok":
+        break
+    elif start.lower() == "exit":
+        exit()
+
+right_answers = 0
+all_answers = len(data_dict)
+
+for i, key in enumerate(keys):
+    correct_answers = [data_dict[key]] + synonym_dict.get(key, [])
+    answer = input(f"Question {i + 1}/{all_answers}: {key}: ")
+    if answer.lower() in [a.lower() for a in correct_answers]:
+        print("RIGHT!")
+        right_answers += 1
+    else:
+        print("WRONG!")
+
+    remaining_questions = all_answers - (i + 1)
+    print(f"You have {remaining_questions} remaining question(s).\n")
+
+percent = right_answers / all_answers * 100
+
+print(
+    f"\nEND\nYou had {all_answers} questions.\n{right_answers} of your answers were right.\nThis means: {percent:.2f} percent")
