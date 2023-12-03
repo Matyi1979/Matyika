@@ -1,0 +1,65 @@
+import math
+class polygon3:
+    def __init__(self, side_num):
+        self.side_num = side_num
+
+    def polygon_circumference(self):
+        raise Exception("ERROR")
+class triangle3(polygon3):
+    def __init__(self, side_num, triangle_side1, triangle_side2, triangle_side3):
+        self.side_num = 3
+        self.triangle_side1 = triangle_side1
+        self.triangle_side2 = triangle_side2
+        self.triangle_side3 = triangle_side3
+
+    def triangle_circumference(self):
+        return int(self.triangle_side1) + int(self.triangle_side2) + int(self.triangle_side3)
+
+
+
+    def triangle_area(self):
+        s = (int(self.triangle_side1) + int(self.triangle_side2) + int(self.triangle_side3)) / 2
+        num = s * (s - int(self.triangle_side1)) * (s - int(self.triangle_side2)) * (s - int(self.triangle_side3))
+        return math.sqrt(num)
+
+
+class quadrangle3(polygon3):
+    def __init__(self, side_num, quadrangle_side1, quadrangle_side2, quadrangle_side3, quadrangle_side4):
+        self.side_num = 4
+        self.quadrangle_side1 = quadrangle_side1
+        self.quadrangle_side2 = quadrangle_side2
+        self.quadrangle_side3 = quadrangle_side3
+        self.quadrangle_side4 = quadrangle_side4
+
+    def quadrangle_circumference(self):
+        return int(self.quadrangle_side1) + int(self.quadrangle_side2) + int(self.quadrangle_side3) + int(self.quadrangle_side4)
+
+    def quadrangle_area(self):
+        return int(self.quadrangle_side1) * int(self.quadrangle_side2)
+
+polygons = []
+with open("polygons.txt", "r") as file:
+        for row in file:
+            x, a, b, c, d = row.strip().split(" ")
+            obj = None
+            if x == "3":
+                obj = triangle3(x, int(a), int(b), int(c))
+                print("Triangle", "has", x, "sides, their lengths are:", int(a), int(b),
+                      int(c))
+            elif x == "4":
+                obj = quadrangle3(x, int(a), int(b), int(c), int(d))
+                print("Quadrangle", "has", x, "sides, their lengths are:", int(a), int(b),
+                      int(c), int(d))
+            if obj is not None:
+                polygons.append(obj)
+
+for obj in polygons:
+    if isinstance(obj, triangle3):
+        print("Triangle with side lengths: ", obj.triangle_side1, obj.triangle_side2, obj.triangle_side3)
+        print("It's circumference is:", obj.triangle_circumference())
+        print("It's area is:", obj.triangle_area())
+    elif isinstance(obj, quadrangle3):
+        print("Quadrangle with side lengths: ", obj.quadrangle_side1, obj.quadrangle_side2, obj.quadrangle_side3,
+              obj.quadrangle_side4)
+        print("It's circumference is:", obj.quadrangle_circumference())
+        print("It's area is:", obj.quadrangle_area())
