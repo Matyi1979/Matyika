@@ -1,0 +1,39 @@
+import os
+import datetime
+import openpyxl
+
+# A keresett év
+keresett_ev = 2023
+
+# Mappa, ahol a TIFF fájlok találhatók
+mappa = 'C:\\Users\\matyi\\OneDrive\\Dokumentumok\\Adatelemzés, programozás\\data\\tiffiles'
+
+# Az összes fájl listázása a mappában
+fajlok = os.listdir(mappa)
+
+# Szűrjük ki a TIFF fájlokat, és csak azokat tartjuk meg, amelyek létrehozásának éve 2023
+tiff_fajlok_2023 = []
+for fajl in fajlok:
+    if fajl.lower().endswith('.tif') or fajl.lower().endswith('.tiff'):
+        teljes_eleresi_ut = os.path.join(mappa, fajl)
+        # Megnyitjuk a fájlt és lekérjük a létrehozás dátumát
+        try:
+            datum = datetime.datetime.fromtimestamp(os.path.getctime(teljes_eleresi_ut))
+            if datum.year == keresett_ev:
+                tiff_fajlok_2023.append(fajl)
+        except Exception as e:
+            print(f"Hiba a(z) {fajl} fájl kezelése során: {str(e)}")
+
+# Az Excel fájl létrehozása és a TIFF fájlnevek írása
+excel_fajl = openpyxl.Workbook()
+excel_lap = excel_fajl.active
+excel_lap.title = f"{keresett_ev}-as TIFF fájlok"
+
+for i, tiff_fajl in enumerate(tiff_fajlok_2023, start=1):
+    excel_lap.cell(row=i, column=1, value=tiff_fajl)
+
+# Az Excel fájl mentése
+excel_nev = f"{keresett_ev}_tiff_fajlok.xlsx"
+excel_fajl.save(excel_nev)
+
+print(f"{keresett_ev}-as TIFF fájlok nevei mentve a(z) {excel_nev} Excel fájlba.")
