@@ -1,0 +1,17 @@
+# Area of circles
+
+import math
+def area(r):
+    return math.pi*(r**2)
+radii = [2, 45, 87.012, 9, 0.345198, 3456, 3]
+
+#1 Direct method:
+areas = []
+for r in radii:
+    a = area(r)
+    areas.append(a)
+print("Areas: ", areas)
+
+# with map function:
+areas2 = list(map(area, radii))
+print("Areas: ", areas2)
